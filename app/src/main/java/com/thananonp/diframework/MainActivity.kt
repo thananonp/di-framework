@@ -13,13 +13,16 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.thananonp.diframework.ui.theme.DIFrameworkTheme
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity(), ScreenOneViewDelegate {
 
     private lateinit var navController: NavHostController
 
-    private val screenTwoViewModel: ScreenTwoViewModel by viewModels { ScreenTwoViewModel.Factory }
+    private val screenTwoViewModel: ScreenTwoViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,11 +50,7 @@ class MainActivity : ComponentActivity(), ScreenOneViewDelegate {
     }
 }
 
-class AppContainer {
-    val screenTwoService = ScreenTwoServiceImpl()
-}
-
-class ScreenTwoServiceImpl : ScreenTwoService {
+class ScreenTwoServiceImpl @Inject constructor() : ScreenTwoService {
     override suspend fun getPlusTwo(original: Int): Int {
         delay(1000)
         return original + 2

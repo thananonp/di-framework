@@ -18,7 +18,9 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.thananonp.diframework.ui.theme.MainApplication
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @Composable
 fun ScreenTwo(viewModel: ScreenTwoViewModel) {
@@ -35,21 +37,14 @@ fun ScreenTwo(viewModel: ScreenTwoViewModel) {
     }
 }
 
-class ScreenTwoViewModel(private val service: ScreenTwoService) : ViewModel() {
+
+@HiltViewModel
+class ScreenTwoViewModel @Inject constructor(private val service: ScreenTwoService) : ViewModel() {
     var state by mutableStateOf<String>("0")
 
     fun getPlusTwo() {
         viewModelScope.launch {
             state = service.getPlusTwo(state.toInt()).toString()
-        }
-    }
-
-    companion object {
-        val Factory: ViewModelProvider.Factory = viewModelFactory {
-            val service = MainApplication.appContainer.screenTwoService
-            initializer {
-                ScreenTwoViewModel(service)
-            }
         }
     }
 }
