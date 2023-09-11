@@ -3,28 +3,29 @@ package com.thananonp.diframework
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.thananonp.diframework.ui.theme.DIFrameworkTheme
+import kotlinx.coroutines.delay
 
 class MainActivity : ComponentActivity(), ScreenOneViewDelegate {
 
-    val screenOneViewModel = ScreenOneViewModel(delegate = this)
-    val screenTwoViewModel = ScreenTwoViewModel()
-
     private lateinit var navController: NavHostController
+
+    private val screenTwoViewModel: ScreenTwoViewModel by viewModels { ScreenTwoViewModel.Factory }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val screenOneViewModel = ScreenOneViewModel(delegate = this)
+
         setContent {
             navController = rememberNavController()
             DIFrameworkTheme {
@@ -46,17 +47,13 @@ class MainActivity : ComponentActivity(), ScreenOneViewDelegate {
     }
 }
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!", modifier = modifier
-    )
+class AppContainer {
+    val screenTwoService = ScreenTwoServiceImpl()
 }
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    DIFrameworkTheme {
-        Greeting("Android")
+class ScreenTwoServiceImpl : ScreenTwoService {
+    override suspend fun getPlusTwo(original: Int): Int {
+        delay(1000)
+        return original + 2
     }
 }
