@@ -19,6 +19,7 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.thananonp.diframework.ui.theme.MainApplication
 import kotlinx.coroutines.launch
+import org.koin.java.KoinJavaComponent.inject
 
 @Composable
 fun ScreenTwo(viewModel: ScreenTwoViewModel) {
@@ -41,15 +42,6 @@ class ScreenTwoViewModel(private val service: ScreenTwoService) : ViewModel() {
     fun getPlusTwo() {
         viewModelScope.launch {
             state = service.getPlusTwo(state.toInt()).toString()
-        }
-    }
-
-    companion object {
-        val Factory: ViewModelProvider.Factory = viewModelFactory {
-            val service = MainApplication.appContainer.screenTwoService
-            initializer {
-                ScreenTwoViewModel(service)
-            }
         }
     }
 }

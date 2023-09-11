@@ -14,12 +14,13 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.thananonp.diframework.ui.theme.DIFrameworkTheme
 import kotlinx.coroutines.delay
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : ComponentActivity(), ScreenOneViewDelegate {
 
     private lateinit var navController: NavHostController
 
-    private val screenTwoViewModel: ScreenTwoViewModel by viewModels { ScreenTwoViewModel.Factory }
+    private val screenTwoViewModel: ScreenTwoViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,10 +46,6 @@ class MainActivity : ComponentActivity(), ScreenOneViewDelegate {
     override fun onNextScreen() {
         navController.navigate("friendslist")
     }
-}
-
-class AppContainer {
-    val screenTwoService = ScreenTwoServiceImpl()
 }
 
 class ScreenTwoServiceImpl : ScreenTwoService {
